@@ -1,0 +1,139 @@
+name: Validate
+
+env:
+  - GO_VERSION="1.23.x"
+  - GO_VERSIONS='["1.23.x", "1.22.x"]'
+  - PLATFORMS='["ubuntu-latest", "windows-latest", "macos-latest"]'
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+    branches: ["main", "master"]
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Check module dependencies
+        shell: bash
+        run: |
+          go version
+          test -z "$(go mod tidy && git status go.* --porcelain)"
+          go mod verify
+
+      - name: Retrieve golangci-lint version
+        id: golangci-lint-version
+        run: |
+          echo "version=$(head -n 1 .golangci.yml | tr -d '# ')" >> $GITHUB_OUTPUT
+  
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: ${{ steps.golangci-lint-version.outputs.version }}
+          only-new-issues: true
+
+  trial:
+    name: Trial
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Run tests
+        run: |
+          go test -short -timeout 60s ./...
+
+  test:
+    name: Test
+    needs:
+      - lint
+      - trial
+    strategy:
+      fail-fast: false
+      matrix:
+        go-version: ${{ fromJSON(env.GO_VERSIONS) }}
+        platform: ${{ fromJSON(env.PLATFORMS) }}
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Run tests
+        run: |
+          go test -race -timeout 60s ./...
+
+  build:
+    name: Build
+    needs:
+      - lint
+      - trial
+    strategy:
+      fail-fast: false
+      matrix:
+        go-version: ${{ fromJSON(env.GO_VERSIONS) }}
+        platform: ${{ fromJSON(env.PLATFORMS) }}
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          version: "2.6.1"
+          args: build --clean --snapshot --single-target
+
+  coverage:
+    name: Coverage
+    needs:
+      - test
+      - build
+    if: ${{ github.ref_name == 'main' || github.ref_name == 'master' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go ${{env.GO_VERSION}}
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{env.GO_VERSION}}
+
+      - name: Test
+        run: go test -count 1 -coverprofile=coverage.txt ./...
+
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{secrets.CODECOV_TOKEN}}
+          slug: ${{github.repository}}
+
+      - name: Generate Go Report Card
+        uses: creekorful/goreportcard-action@v1.0
+
