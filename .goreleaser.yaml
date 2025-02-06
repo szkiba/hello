@@ -4,6 +4,10 @@ version: 2
 env:
   - IMAGE=szkiba/{{.ProjectName}}
 
+before:
+  hooks:
+    - go mod tidy
+
 builds:
   - id: hello
     binary: hello
