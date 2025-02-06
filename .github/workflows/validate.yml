@@ -32,14 +32,14 @@ jobs:
         shell: bash
         run: |
           cat >> $GITHUB_OUTPUT <<END
-          versions='${{env.GO_VERSIONS}}'
+          versions=${{env.GO_VERSIONS}}
           END
       - name: Retrieve go versions
         id: platforms
         shell: bash
         run: |
           cat >> $GITHUB_OUTPUT <<END
-          versions='${{env.GO_VERSIONS}}'
+          versions=${{env.GO_VERSIONS}}
           END
       - name: Retrieve golangci-lint version
         id: golangci-lint-version
