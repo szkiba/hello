@@ -1,0 +1,18 @@
+ARG GO_VERSION=1.23.6
+ARG VARIANT=alpine3.21
+
+FROM golang:${GO_VERSION}-${VARIANT}
+
+RUN apk update && apk add git && \
+    addgroup --gid 1000 hello && \
+    adduser --uid 1000 --ingroup hello --disabled-password --gecos "" hello
+
+COPY --chown=root:root --chmod=4755 fixids /usr/local/bin/
+COPY --chown=hello:hello --chmod=755 hello /usr/local/bin/
+COPY --chown=root:root --chmod=755 docker-entrypoint.sh /usr/local/bin/entrypoint.sh
+
+WORKDIR /hello
+RUN chown hello:hello /hello
+USER hello
+
+ENTRYPOINT ["entrypoint.sh"]
