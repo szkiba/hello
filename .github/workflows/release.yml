@@ -38,10 +38,22 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Dry Run GoReleaser
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          version: "2.6.1"
+          args: release --clean --snapshot
+
+      - name: Test Docker Image
+        run: |
+          mkdir ${{ runner.temp }}/testrun
+          cd ${{ runner.temp }}/testrun
+          docker run --rm -u "$(id -u):$(id -g)" -v "$PWD:/xk6" ${{ github.repository }}:latest-amd64 \
+            build
+
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
-          distribution: goreleaser
           version: "2.6.1"
           args: release --clean
         env:
