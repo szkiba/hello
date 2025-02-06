@@ -44,6 +44,7 @@ dockers:
     ids: ["hello", "fixids"]
     dockerfile: Dockerfile.goreleaser
     use: buildx
+    extra_files: ["docker-entrypoint.sh"]
     image_templates:
       - "docker.io/{{ .Env.IMAGE }}:{{ .Tag }}-amd64"
       - "docker.io/{{ .Env.IMAGE }}:v{{ .Major }}-amd64"
@@ -66,6 +67,7 @@ dockers:
     ids: ["hello", "fixids"]
     dockerfile: Dockerfile.goreleaser
     use: buildx
+    extra_files: ["docker-entrypoint.sh"]
     image_templates:
       - "docker.io/{{ .Env.IMAGE }}:{{ .Tag }}-arm64"
       - "docker.io/{{ .Env.IMAGE }}:v{{ .Major }}-arm64"
