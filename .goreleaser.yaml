@@ -2,16 +2,16 @@ project_name: hello
 version: 2
 
 env:
-  - CHO_ENABLED=0
   - IMAGE=szkiba/{{.ProjectName}}
 
 builds:
   - id: hello
     binary: hello
     main: .
-    goos: ["linux"]
+    goos: ["linux", "windows", "darwin"]
     goarch: ["amd64", "arm64"]
     flags: ["-trimpath"]
+    env: ["CGO_ENABLED=0"]
     ldflags: ["-s -w -X main.version={{.Version}}"]
   - id: fixids
     binary: fixids
@@ -19,6 +19,7 @@ builds:
     goos: ["linux"]
     goarch: ["amd64", "arm64"]
     flags: ["-trimpath"]
+    env: ["CGO_ENABLED=0"]
     ldflags: ["-s -w"]
 
 source:
@@ -28,10 +29,10 @@ source:
 archives:
   - id: bundle
     builds: ["hello"]
-    format: tar.gz
+    formats: ["tar.gz"]
     format_overrides:
       - goos: windows
-        format: zip
+        formats: ["zip"]
 
 checksum:
   name_template: "{{ .ProjectName }}_{{ .Version }}_checksums.txt"
