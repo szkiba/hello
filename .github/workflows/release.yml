@@ -31,7 +31,7 @@ jobs:
         run: |
           cat >> $GITHUB_STEP_SUMMARY <<END
 
-          ## Configuration
+          ### Configuration
 
           Parameter            | Variable           | Value
           ---------------------|--------------------|-----------------------------
