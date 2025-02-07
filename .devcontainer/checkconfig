@@ -2,6 +2,7 @@
 
 jq -r '
 {
+  DEVCONTAIENR_IMAGE: .image,
   GO_VERSION: .features["ghcr.io/devcontainers/features/go:1"]["version"],
   GOLANGCI_LINT_VERSION: .features["ghcr.io/devcontainers/features/go:1"]["golangciLintVersion"],
   GORELEASER_VERSION: .features["ghcr.io/guiyomh/features/goreleaser:0"]["version"]
