@@ -122,8 +122,8 @@ jobs:
           version: "${{ vars.GORELEASER_VERSION }}"
           args: build --clean --snapshot --single-target
 
-  coverage:
-    name: Coverage
+  report:
+    name: Report
     needs:
       - test
       - build
