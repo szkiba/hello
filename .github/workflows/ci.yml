@@ -35,12 +35,12 @@ jobs:
 
           ## Configuration
 
-          Parameter                 | Variable              | Value
-          --------------------------|-----------------------|------------------------------------
-          **go version for build**  | GO_VERSION            | **${{vars.GO_VERSION}}**
-          **go versions for test**  | GO_VERSIONS           | **${{vars.GO_VERSIONS}}**
-          **golangci-lint version** | GOLANGCI_LINT_VERSION | **${{vars.GOLANGCI_LINT_VERSION}}**
-          **GoReleaser version**    | GORELEASER_VERSION    | **${{vars.GORELEASER_VERSION}}**
+          Parameter             | Variable              | Value
+          ----------------------|-----------------------|--------------------------------
+          go version for build  | GO_VERSION            | ${{vars.GO_VERSION}}
+          go versions for test  | GO_VERSIONS           | ${{vars.GO_VERSIONS}}
+          golangci-lint version | GOLANGCI_LINT_VERSION | ${{vars.GOLANGCI_LINT_VERSION}}
+          GoReleaser version    | GORELEASER_VERSION    | ${{vars.GORELEASER_VERSION}}
 
           END
 

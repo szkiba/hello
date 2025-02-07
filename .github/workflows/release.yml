@@ -33,10 +33,10 @@ jobs:
 
           ## Configuration
 
-          Parameter                | Variable           | Value
-          -------------------------|------------ -------|---------------------------------
-          **go version for build** | GO_VERSION         | **${{vars.GO_VERSION}}**
-          **GoReleaser version**   | GORELEASER_VERSION | **${{vars.GORELEASER_VERSION}}**
+          Parameter            | Variable           | Value
+          ---------------------|--------------------|-----------------------------
+          go version for build | GO_VERSION         | ${{vars.GO_VERSION}}
+          GoReleaser version   | GORELEASER_VERSION | ${{vars.GORELEASER_VERSION}}
 
           END
 
