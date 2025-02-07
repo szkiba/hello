@@ -3,7 +3,7 @@
 function setup() {
     ARCH=$(dpkg --print-architecture)
     PROJECT=$(yq -r '.project_name' .goreleaser.y*ml)
-    EXE="dist/${PROJECT}_linux_${ARCH}_v1/${PROJECT}"
+    EXE="$(ls dist/${PROJECT}_linux_${ARCH}_v*/${PROJECT})"
 
     if [ ! -x "$EXE" ] ; then
       echo "    - building snapshot" >&3
