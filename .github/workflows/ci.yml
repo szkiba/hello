@@ -142,20 +142,20 @@ jobs:
         run: |
           cat .devcontainer/devcontainer.json | jq -r '
             {
-              DEVCONTAIENR_IMAGE: .image,
+              DEVCONTAINER_IMAGE: .image,
               GO_VERSION: .features["ghcr.io/devcontainers/features/go:1"]["version"],
               GOLANGCI_LINT_VERSION: .features["ghcr.io/devcontainers/features/go:1"]["golangciLintVersion"],
               GORELEASER_VERSION: .features["ghcr.io/guiyomh/features/goreleaser:0"]["version"]
             } | to_entries | map("\(.key)=\(.value|tostring)")|.[]' >> "$GITHUB_ENV"
 
-      - name: Check image
+      - name: Check image ("${{vars.DEVCONTAINER_IMAGE}}")
         run: test "${{env.DEVCONTAINER_IMAGE}}" == "${{vars.DEVCONTAINER_IMAGE}}"
 
-      - name: Check go version
+      - name: Check go version ("${{vars.GO_VERSION}}")
         run: test "${{env.GO_VERSION}}" == "${{vars.GO_VERSION}}"
 
-      - name: Check golangci-lint
+      - name: Check golangci-lint ()"${{vars.GOLANGCI_LINT_VERSION}}")
         run: test "${{env.GOLANGCI_LINT_VERSION}}" == "${{vars.GOLANGCI_LINT_VERSION}}"
         
-      - name: Check goreleaser
+      - name: Check goreleaser ()"${{vars.GORELEASER_VERSION}}")
         run: test "${{env.GORELEASER_VERSION}}" == "${{vars.GORELEASER_VERSION}}"
