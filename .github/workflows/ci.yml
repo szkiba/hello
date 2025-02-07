@@ -124,8 +124,9 @@ jobs:
 
       - name: Setup Bats
         if: ${{ hashFiles('.github/ci.bats') != '' && runner.os == 'Linux' }}
-        id: setup-bats
-        uses: bats-core/bats-action@3.0.0
+        run: apt install bats
+        #id: setup-bats
+        #uses: bats-core/bats-action@3.0.0
 
       - name: Test Snapshot
         if: ${{ hashFiles('.github/ci.bats') != '' && runner.os == 'Linux'  }}
