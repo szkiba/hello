@@ -129,7 +129,7 @@ jobs:
 
       - name: Test Snapshot
         if: ${{ hashFiles('.github/ci.bats') != '' && runner.os == 'Linux'  }}
-        run: bats  --format pretty .github/ci.bats
+        run: bats --pretty .github/ci.bats
 
   report:
     name: Report
