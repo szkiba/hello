@@ -1,8 +1,17 @@
 #!/usr/bin/env bats
 
+function arch() {
+    if [ "$RUNNER_ARCH" = "ARM64" ]; then
+      echo -n "arm64"
+    fi
+
+    echo -n "amd64"
+}
+
 function setup() {
+    ARCH=$(arch)
     PROJECT=$(yq -r '.project_name' .goreleaser.yaml)
-    EXE="dist/${PROJECT}_linux_amd64_v1/${PROJECT}"
+    EXE="dist/${PROJECT}_linux_${ARCH}_v1/${PROJECT}"
 
     if [ ! -x "$EXE" ] ; then
       echo "    - building snapshot" >&3

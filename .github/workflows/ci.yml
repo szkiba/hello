@@ -123,12 +123,12 @@ jobs:
           args: build --clean --snapshot --single-target
 
       - name: Setup Bats
-        if: ${{ hashFiles('.github/ci.bats') != '' && matrix.platform == 'ubuntu-latest' }}
+        if: ${{ hashFiles('.github/ci.bats') != '' && runner.os != 'Windows' }}
         id: setup-bats
         uses: bats-core/bats-action@3.0.0
 
       - name: Test Snapshot
-        if: ${{ hashFiles('.github/ci.bats') != '' && matrix.platform == 'ubuntu-latest' }}
+        if: ${{ hashFiles('.github/ci.bats') != '' && runner.os != 'Windows'  }}
         run: bats .github/ci.bats
 
   report:
