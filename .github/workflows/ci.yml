@@ -133,7 +133,7 @@ jobs:
     name: Dev Container
     if: ${{ vars.DEVCONTAINER_IMAGE != '' }}
     runs-on: ubuntu-latest
-    continue-on-error: true
+    continue-on-error: false
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -149,8 +149,8 @@ jobs:
             } | to_entries | map("\(.key)=\(.value|tostring)")|.[]' >> "$GITHUB_ENV"
 
       - name: Check image
-        run: test "${{env.DEVCONTAIENR_IMAGE}}" == "${{vars.DEVCONTAIENR_IMAGE}}"
-    
+        run: test "${{env.DEVCONTAINER_IMAGE}}" == "${{vars.DEVCONTAINER_IMAGE}}"
+
       - name: Check go version
         run: test "${{env.GO_VERSION}}" == "${{vars.GO_VERSION}}"
 
@@ -159,4 +159,3 @@ jobs:
         
       - name: Check goreleaser
         run: test "${{env.GORELEASER_VERSION}}" == "${{vars.GORELEASER_VERSION}}"
-
