@@ -134,6 +134,8 @@ jobs:
     if: ${{ vars.DEVCONTAINER_IMAGE != '' }}
     runs-on: ubuntu-latest
     continue-on-error: false
+    strategy:
+      fail-fast: false
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -148,14 +150,14 @@ jobs:
               GORELEASER_VERSION: .features["ghcr.io/guiyomh/features/goreleaser:0"]["version"]
             } | to_entries | map("\(.key)=\(.value|tostring)")|.[]' >> "$GITHUB_ENV"
 
-      - name: Check image ("${{vars.DEVCONTAINER_IMAGE}}")
+      - name: Check image ${{vars.DEVCONTAINER_IMAGE}}
         run: test "${{env.DEVCONTAINER_IMAGE}}" == "${{vars.DEVCONTAINER_IMAGE}}"
 
-      - name: Check go version ("${{vars.GO_VERSION}}")
-        run: test "${{env.GO_VERSION}}" == "${{vars.GO_VERSION}}"
+      - name: Check go version ${{vars.GO_VERSION}}
+        run: test "${{env.GO_VERSION}}" == "$(echo ${{vars.GO_VERSION}}|sed -e 's/\.x//g')"
 
-      - name: Check golangci-lint ()"${{vars.GOLANGCI_LINT_VERSION}}")
-        run: test "${{env.GOLANGCI_LINT_VERSION}}" == "${{vars.GOLANGCI_LINT_VERSION}}"
+      - name: Check golangci-lint version ${{vars.GOLANGCI_LINT_VERSION}}
+        run: test "${{env.GOLANGCI_LINT_VERSION}}" == "$(echo ${{vars.GOLANGCI_LINT_VERSION}}|sed -e 's/v//g')"
         
-      - name: Check goreleaser ()"${{vars.GORELEASER_VERSION}}")
+      - name: Check goreleaser version ${{vars.GORELEASER_VERSION}}
         run: test "${{env.GORELEASER_VERSION}}" == "${{vars.GORELEASER_VERSION}}"
