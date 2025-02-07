@@ -33,12 +33,10 @@ jobs:
 
           ## Configuration
 
-          Description           | Variable/Secret         | Value
-          ----------------------|-------------------------|----------------
-          go version for build  | `GO_VERSION`            | `${{vars.GO_VERSION}}`
-          GoReleaser version    | `GORELEASER_VERSION`    | `${{vars.GORELEASER_VERSION}}`
-          Docker Hub User       | `DOCKERHUB_USERNAME`    | `********`
-          Docker Hub Token      | `DOCKERHUB_TOKEN`       | `********`
+          Parameter                | Variable           | Value
+          -------------------------|------------ -------|---------------------------------
+          **go version for build** | GO_VERSION         | **${{vars.GO_VERSION}}**
+          **GoReleaser version**   | GORELEASER_VERSION | **${{vars.GORELEASER_VERSION}}**
 
           END
 
