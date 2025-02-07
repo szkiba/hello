@@ -129,6 +129,8 @@ jobs:
 
       - name: Test Snapshot
         if: ${{ hashFiles('.github/ci.bats') != '' && runner.os == 'Linux'  }}
+        env:
+          TERM: xterm
         run: bats .github/ci.bats
 
   report:
