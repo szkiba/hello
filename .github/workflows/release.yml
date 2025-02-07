@@ -52,7 +52,7 @@ jobs:
 
       - name: Setup Bats
         if: ${{ hashFiles('.github/release.bats') != '' }}
-        run: apt install bats
+        run: sudo apt-get install -y bats
         #id: setup-bats
         #uses: bats-core/bats-action@3.0.0
 
