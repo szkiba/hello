@@ -1,9 +1,5 @@
 name: Validate
 
-env:
-  GO_VERSIONS: '["1.23.x", "1.22.x"]'
-  PLATFORMS: '["ubuntu-latest", "windows-latest", "macos-latest"]'
-
 on:
   workflow_dispatch:
   push:
@@ -12,45 +8,17 @@ on:
     branches: ["main", "master"]
 
 jobs:
-  config:
-    name: Config
-    runs-on: ubuntu-latest
-    outputs:
-      go-version: ${{steps.go-version.outputs.version}}
-      go-versions: ${{steps.go-versions.outputs.versions}}
-      platforms: ${{steps.platforms.outputs.platforms}}
-      golangci-lint-version: ${{steps.golangci-lint-version.outputs.version}}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Retrieve go version
-        id: go-version
-        shell: bash
-        run: echo "version=$(echo '${{env.GO_VERSIONS}}' | jq -r '.[0]')" >> $GITHUB_OUTPUT
-      - name: Retrieve go versions
-        id: go-versions
-        shell: bash
-        run: echo 'versions=${{env.GO_VERSIONS}}'  >> $GITHUB_OUTPUT
-      - name: Retrieve go versions
-        id: platforms
-        run: echo 'platforms=${{env.PLATFORMS}}'  >> $GITHUB_OUTPUT
-      - name: Retrieve golangci-lint version
-        id: golangci-lint-version
-        run: |
-          echo "version=$(head -n 1 .golangci.yml | tr -d '# ')" >> $GITHUB_OUTPUT
-
   lint:
     name: Lint
-    needs: ["config"]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Go ${{ needs.config.outputs.go-version }}
+      - name: Setup Go ${{ vars.GO_VERSION }}
         uses: actions/setup-go@v5
         with:
-          go-version: ${{ needs.config.outputs.go-version }}
+          go-version: "${{ vars.GO_VERSION }}"
 
       - name: Check module dependencies
         shell: bash
@@ -63,21 +31,20 @@ jobs:
       - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v6
         with:
-          version: ${{ needs.config.outputs.golangci-lint-version }}
+          version: "${{ vars.GOLANGCI_LINT_VERSION }}"
           only-new-issues: true
 
   trial:
     name: Trial
     runs-on: ubuntu-latest
-    needs: ["config"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Go ${{ needs.config.outputs.go-version }}
+      - name: Setup Go ${{ vars.GO_VERSION }}
         uses: actions/setup-go@v5
         with:
-          go-version: ${{ needs.config.outputs.go-version }}
+          go-version: "${{ vars.GO_VERSION }}"
 
       - name: Run tests
         run: |
@@ -86,14 +53,13 @@ jobs:
   test:
     name: Test
     needs:
-      - config
       - lint
       - trial
     strategy:
       fail-fast: false
       matrix:
-        go-version: ${{ fromJSON(needs.config.outputs.go-versions) }}
-        platform: ${{ fromJSON(needs.config.outputs.platforms) }}
+        go-version: ${{ fromJSON(vars.GO_VERSIONS) }}
+        platform: ${{ fromJSON(vars.PLATFORMS) }}
     runs-on: ${{ matrix.platform }}
     steps:
       - name: Checkout code
@@ -111,14 +77,13 @@ jobs:
   build:
     name: Build
     needs:
-      - config
       - lint
       - trial
     strategy:
       fail-fast: false
       matrix:
-        go-version: ${{ fromJSON(needs.config.outputs.go-versions) }}
-        platform: ${{ fromJSON(needs.config.outputs.platforms) }}
+        go-version: ${{ fromJSON(vars.GO_VERSIONS) }}
+        platform: ${{ fromJSON(vars.PLATFORMS) }}
     runs-on: ${{ matrix.platform }}
     steps:
       - name: Checkout code
@@ -138,7 +103,6 @@ jobs:
   coverage:
     name: Coverage
     needs:
-      - config
       - test
       - build
     if: ${{ github.ref_name == 'main' || github.ref_name == 'master' }}
@@ -147,10 +111,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Go ${{needs.config.outputs.go-version}}
+      - name: Setup Go ${{vars.GO_VERSION}}
         uses: actions/setup-go@v5
         with:
-          go-version: ${{needs.config.outputs.go-version}}
+          go-version: "${{vars.GO_VERSION}}"
 
       - name: Test
         run: go test -count 1 -coverprofile=coverage.txt ./...

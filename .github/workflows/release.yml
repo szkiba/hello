@@ -15,10 +15,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Go
+      - name: Set up Go ${{ vars.GO_VERSION }}
         uses: actions/setup-go@v5
         with:
-          go-version: "1.23.x"
+          go-version: "${{ vars.GO_VERSION }}"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -28,7 +28,7 @@ jobs:
       - name: Dry Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
-          version: "2.6.1"
+          version: "${{ vars.GORELEASER_VERSION }}"
           args: release --clean --snapshot
 
       - name: Test Docker Image
@@ -54,7 +54,7 @@ jobs:
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
-          version: "2.6.1"
+          version: "${{ vars.GORELEASER_VERSION }}"
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
