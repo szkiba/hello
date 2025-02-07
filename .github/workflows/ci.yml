@@ -173,6 +173,38 @@ jobs:
       - name: Generate Go Report Card
         uses: creekorful/goreportcard-action@v1.0
 
+  snapshot:
+    name: Snapshot
+    needs:
+      - test
+      - build
+    if: ${{ github.ref_name == 'main' || github.ref_name == 'master' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go ${{vars.GO_VERSION}}
+        uses: actions/setup-go@v5
+        with:
+          go-version: "${{vars.GO_VERSION}}"
+
+      - name: GoReleaser snapshot
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          version: "${{ vars.GORELEASER_VERSION }}"
+          args: release --clean --snapshot
+
+      - uses: "marvinpinto/action-automatic-releases@latest"
+        with:
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "snapshot"
+          prerelease: true
+          title: "Snapshot Build"
+          files: |
+            dist/*.tar.gz
+            dist/*.zip
+
   devcontainer:
     name: DevContainer
     if: ${{ vars.DEVCONTAINER_IMAGE != '' }}

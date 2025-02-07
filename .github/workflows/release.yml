@@ -31,6 +31,8 @@ jobs:
         run: |
           cat >> $GITHUB_STEP_SUMMARY <<END
 
+          ## ${{ github.ref_name }}
+
           ### Configuration
 
           Parameter            | Variable           | Value
