@@ -1,16 +1,8 @@
 #!/usr/bin/env bats
 
-function arch() {
-    if [ "$RUNNER_ARCH" = "ARM64" ]; then
-      echo -n "arm64"
-    fi
-
-    echo -n "amd64"
-}
-
 function setup() {
-    ARCH=$(arch)
-    PROJECT=$(yq -r '.project_name' .goreleaser.yaml)
+    ARCH=$(dpkg --print-architecture)
+    PROJECT=$(yq -r '.project_name' .goreleaser.y*ml)
     EXE="dist/${PROJECT}_linux_${ARCH}_v1/${PROJECT}"
 
     if [ ! -x "$EXE" ] ; then

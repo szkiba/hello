@@ -1,15 +1,7 @@
 #!/usr/bin/env bats
 
-function arch() {
-    if [ "$RUNNER_ARCH" = "ARM64" ]; then
-      echo -n "arm64"
-    fi
-
-    echo -n "amd64"
-}
-
 function setup() {
-    ARCH=$(arch)
+    ARCH=$(dpkg --print-architecture)
     REPO=${GITHUB_REPOSITORY:-szkiba/hello}
     IMAGE=${REPO}:latest-$ARCH
 
