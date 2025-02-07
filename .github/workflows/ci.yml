@@ -127,3 +127,27 @@ jobs:
       - name: Generate Go Report Card
         uses: creekorful/goreportcard-action@v1.0
 
+  devcontainer:
+    name: Dev Container
+    if: ${{ vars.DEVCONTAINER_IMAGE != '' }}
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Config
+        run: |
+          cat .devcontainer/devcontainer.json | jq -r '
+            {
+              GO_VERSION: .features["ghcr.io/devcontainers/features/go:1"]["version"],
+              GOLANGCI_LINT_VERSION: .features["ghcr.io/devcontainers/features/go:1"]["golangciLintVersion"],
+              GORELEASER_VERSION: .features["ghcr.io/guiyomh/features/goreleaser:0"]["version"]
+            } | to_entries | map("\(.key)=\(.value|tostring)")|.[]' >> "$GITHUB_ENV"
+
+      - name: Check go version
+        run: test "${{env.GO_VERSION}}" == "${{vars.GO_VERSION}}"
+
+      - name: Check golangci-lint
+        run: test "${{env.GOLANGCI_LINT_VERSION}}" == "${{vars.GOLANGCI_LINT_VERSION}}"
+        
+      - name: Check goreleaser
+        run: test "${{env.GORELEASER_VERSION}}" == "${{vars.GORELEASER_VERSION}}"
+
