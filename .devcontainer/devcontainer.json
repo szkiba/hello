@@ -9,7 +9,9 @@
     "ghcr.io/guiyomh/features/goreleaser:0": { "version": "2.6.1" },
     "ghcr.io/guiyomh/features/gotestsum:0": {},
     "ghcr.io/michidk/devcontainers-features/bun:1": {},
-    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
+    "ghcr.io/edouard-lopez/devcontainer-features/bats:0":{},
+    "ghcr.io/eitsupi/devcontainer-features/jq-likes:2": {"gojqVersion": "none", "jqVersion": "none", "xqVersion": "none", "jaqVersion": "none", "yqVersion": "4"}
   },
 
   "postCreateCommand": {

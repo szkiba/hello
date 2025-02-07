@@ -70,7 +70,7 @@ jobs:
 
       - name: Run tests
         run: |
-          go test -short -timeout 60s ./...
+          go test -short ./...
 
   test:
     name: Test
@@ -116,11 +116,20 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
 
-      - name: Run GoReleaser
+      - name: GoReleaser build
         uses: goreleaser/goreleaser-action@v6
         with:
           version: "${{ vars.GORELEASER_VERSION }}"
           args: build --clean --snapshot --single-target
+
+      - name: Setup Bats
+        if: ${{ hashFiles('.github/ci.bats') != '' }}
+        id: setup-bats
+        uses: bats-core/bats-action@3.0.0
+
+      - name: Test Snapshot
+        if: ${{ hashFiles('.github/ci.bats') != '' }}
+        run: bats .github/ci.bats
 
   report:
     name: Report
