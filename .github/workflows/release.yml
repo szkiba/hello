@@ -9,7 +9,26 @@ permissions:
   packages: write
 
 jobs:
+  prerequisites:
+    name: Prerequisites
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - name: Check vars.GO_VERSION
+        run: test -n "${{vars.GO_VERSION}}"
+
+      - name: Check vars.GORELEASER_VERSION
+        run: test -n "${{vars.GORELEASER_VERSION}}"
+
+      - name: Check secrets.DOCKERHUB_USERNAME
+        run: test -n "${{secrets.DOCKERHUB_USERNAME}}"
+
+      - name: Check secrets.DOCKERHUB_TOKEN
+        run: test -n "${{secrets.DOCKERHUB_TOKEN}}"
+
   Release:
+    needs: ["prerequisites"]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
