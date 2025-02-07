@@ -193,7 +193,7 @@ jobs:
         uses: goreleaser/goreleaser-action@v6
         with:
           version: "${{ vars.GORELEASER_VERSION }}"
-          args: release --clean --snapshot
+          args: release --clean --snapshot --skip docker 
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
