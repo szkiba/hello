@@ -27,6 +27,22 @@ jobs:
       - name: Check secrets.DOCKERHUB_TOKEN
         run: test -n "${{secrets.DOCKERHUB_TOKEN}}"
 
+      - name: Summary
+        run: |
+          cat >> $GITHUB_STEP_SUMMARY <<END
+
+          ## Configuration
+
+          Description           | Variable/Secret         | Value
+          ----------------------|-------------------------|----------------
+          go version for build  | `GO_VERSION`            | `${{vars.GO_VERSION}}`
+          GoReleaser version    | `GORELEASER_VERSION`    | `${{vars.GORELEASER_VERSION}}`
+          Docker Hub User       | `DOCKERHUB_USERNAME`    | `********`
+          Docker Hub Token      | `DOCKERHUB_TOKEN`       | `********`
+
+          END
+
+
   Release:
     needs: ["prerequisites"]
     runs-on: ubuntu-latest
@@ -44,17 +60,15 @@ jobs:
         with:
           platforms: 'amd64,arm64'
 
+      - name: Setup Bats
+        if: ${{ hashFiles('.github/release.bats') != '' }}
+        run: sudo apt-get install -y bats
+
       - name: GoReleaser snapshot
         uses: goreleaser/goreleaser-action@v6
         with:
           version: "${{ vars.GORELEASER_VERSION }}"
           args: release --clean --snapshot
-
-      - name: Setup Bats
-        if: ${{ hashFiles('.github/release.bats') != '' }}
-        run: sudo apt-get install -y bats
-        #id: setup-bats
-        #uses: bats-core/bats-action@3.0.0
 
       - name: Test Snapshot
         if: ${{ hashFiles('.github/release.bats') != '' }}

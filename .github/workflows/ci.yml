@@ -29,6 +29,22 @@ jobs:
       - name: Check secrets.CODECOV_TOKEN
         run: test -n "${{secrets.CODECOV_TOKEN}}"
 
+      - name: Summary
+        run: |
+          cat >> $GITHUB_STEP_SUMMARY <<END
+
+          ## Configuration
+
+          Description           | Variable/Secret         | Value
+          ----------------------|-------------------------|----------------
+          go version for build  | `GO_VERSION`            | `${{vars.GO_VERSION}}`
+          go versions for test  | `GO_VERSIONS`           | `${{vars.GO_VERSIONS}}`
+          golangci-lint version | `GOLANGCI_LINT_VERSION` | `${{vars.GOLANGCI_LINT_VERSION}}`
+          GoReleaser version    | `GORELEASER_VERSION`    | `${{vars.GORELEASER_VERSION}}`
+          Codecov token         | `CODECOV_TOKEN`         | `********`
+
+          END
+
   lint:
     name: Lint
     runs-on: ubuntu-latest
@@ -116,19 +132,17 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
 
+      - name: Setup Bats
+        if: ${{ hashFiles('.github/ci.bats') != '' && runner.os == 'Linux' }}
+        run: sudo apt-get install -y bats
+
       - name: GoReleaser build
         uses: goreleaser/goreleaser-action@v6
         with:
           version: "${{ vars.GORELEASER_VERSION }}"
           args: build --clean --snapshot --single-target
 
-      - name: Setup Bats
-        if: ${{ hashFiles('.github/ci.bats') != '' && runner.os == 'Linux' }}
-        run: sudo apt-get install -y bats
-        #id: setup-bats
-        #uses: bats-core/bats-action@3.0.0
-
-      - name: Test Snapshot
+      - name: Test build
         if: ${{ hashFiles('.github/ci.bats') != '' && runner.os == 'Linux'  }}
         run: bats .github/ci.bats
 
