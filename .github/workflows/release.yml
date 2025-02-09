@@ -7,7 +7,7 @@ on:
 jobs:
   release:
     name: Release
-    uses: ./.github/workflows/reusable-cli-release.yml
+    uses: ./.github/workflows/cli-release.yml
     secrets:
       docker-user: ${{secrets.DOCKERHUB_USERNAME}}
       docker-token: ${{secrets.DOCKERHUB_TOKEN}}

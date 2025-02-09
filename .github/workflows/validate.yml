@@ -1,4 +1,4 @@
-name: CI
+name: Validate
 
 on:
   workflow_dispatch:
@@ -8,9 +8,9 @@ on:
     branches: ["main", "master"]
 
 jobs:
-  ci:
-    name: CI
-    uses: ./.github/workflows/reusable-cli-ci.yml
+  validate:
+    name: Validate
+    uses: ./.github/workflows/cli-validate.yml
     secrets: 
       codecov-token: ${{secrets.CODECOV_TOKEN}}
     with:
