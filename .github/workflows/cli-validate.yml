@@ -37,10 +37,8 @@ jobs:
     name: Config
     runs-on: ubuntu-latest
     outputs:
-      docker: ${{steps.configure.outputs.docker}}
-      docker-io: ${{steps.configure.outputs.docker-io}}
-      ghcr-io: ${{steps.configure.outputs.ghcr-io}}
       devcontainer: ${{steps.configure.outputs.devcontainer}}
+      codecov: ${{steps.configure.outputs.codecov}}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
