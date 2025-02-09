@@ -180,7 +180,7 @@ jobs:
       - config
       - test
       - build
-    if: ${{ (github.ref_name == 'main' || github.ref_name == 'master') && (needs.config.outputs.codecov) }}
+    if: ${{ (github.ref_name == 'main' || github.ref_name == 'master') && (needs.config.outputs.codecov == 'true') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
