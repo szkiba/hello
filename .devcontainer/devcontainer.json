@@ -11,12 +11,9 @@
     "ghcr.io/michidk/devcontainers-features/bun:1": {},
     "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
     "ghcr.io/edouard-lopez/devcontainer-features/bats:0":{},
-    "ghcr.io/eitsupi/devcontainer-features/jq-likes:2": {"gojqVersion": "none", "jqVersion": "none", "xqVersion": "none", "jaqVersion": "none", "yqVersion": "4"}
-  },
-
-  "postCreateCommand": {
-    "cdo": "eget --to=$HOME/.local/bin/cdo szkiba/cdo",
-    "mdcode": "eget --to=$HOME/.local/bin/mdcode szkiba/mdcode"
+    "ghcr.io/eitsupi/devcontainer-features/jq-likes:2": {"gojqVersion": "none", "jqVersion": "none", "xqVersion": "none", "jaqVersion": "none", "yqVersion": "4"},
+    "ghcr.io/szkiba/devcontainer-features/cdo:1":{},
+    "ghcr.io/szkiba/devcontainer-features/mdcode:1":{}
   },
 
   "remoteEnv": {

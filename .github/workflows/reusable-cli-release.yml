@@ -1,0 +1,127 @@
+name: CLI Release
+
+on:
+  workflow_call:
+    secrets:
+      docker-user:
+        description: Docker
+        required: false
+      docker-token:
+        description: Docker
+        required: false
+    inputs:
+      go-version:
+        description: go version for building
+        required: true
+        type: string
+      goreleaser-version:
+        description: goreleaser tool version
+        required: true
+        type: string
+      bats:
+        description: bats scripts before release
+        type: string
+        required: false
+
+jobs:
+  config:
+    name: Config
+    runs-on: ubuntu-latest
+    outputs:
+      docker: ${{steps.configure.outputs.docker}}
+      docker-io: ${{steps.configure.outputs.docker-io}}
+      ghcr-io: ${{steps.configure.outputs.ghcr-io}}
+    steps:
+      - name: Configure
+        id: configure
+        run: |
+          if yq -r '.dockers[].image_templates[]' .goreleaser.y*ml | grep -q ghcr.io ; then
+            echo "docker=true" >> $GITHUB_OUTPUT
+            echo "ghcr-io=true" >> $GITHUB_OUTPUT
+          else
+            if yq -r '.dockers[].image_templates[]' .goreleaser.y*ml | grep -qv ghcr.io ; then
+              echo "docker=true" >> $GITHUB_OUTPUT
+              echo "docker-io=true" >> $GITHUB_OUTPUT
+            fi
+          fi
+      - name: Summary
+        run: |
+          cat >> $GITHUB_STEP_SUMMARY <<END
+
+          ## ${{ github.ref_name }}
+
+          ### Configuration
+
+          Description          | Value
+          ---------------------|-----------------------------
+          go version for build | ${{inputs.go-version}}
+          GoReleaser version   | ${{inputs.goreleaser-version}}
+
+          END
+
+          if [ -n "${{steps.configure.outputs.ghcr-io}}" ]; then
+            echo "Push Docker image to ghcr.io " >> $GITHUB_STEP_SUMMARY
+          fi
+          if [ -n "${{steps.configure.outputs.github-io}}" ]; then
+            echo "Push Docker image to docker.io " >> $GITHUB_STEP_SUMMARY
+          fi
+
+  Release:
+    runs-on: ubuntu-latest
+    needs: ["config"]
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go ${{ inputs.go-version }}
+        uses: actions/setup-go@v5
+        with:
+          go-version: "${{ inputs.go-version }}"
+
+      - name: Set up QEMU
+        if: ${{needs.config.outputs.docker == 'true'}}
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: 'amd64,arm64'
+
+      - name: Setup Bats
+        if: ${{ inputs.bats != '' }}
+        run: sudo apt-get install -y bats
+
+      - name: GoReleaser snapshot
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          version: "${{ inputs.goreleaser-version }}"
+          args: release --clean --snapshot
+
+      - name: Test Snapshot
+        if: ${{ inputs.bats != '' }}
+        run: bats ${{ inputs.bats }}
+
+      - name: Login to Docker Hub
+        if: ${{ needs.config.outputs.docker-io == 'true' }}
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.docker-user }}
+          password: ${{ secrets.docker-token }}          
+
+      - name: Login to GitHub Packages
+        if: ${{ needs.config.outputs.ghcr-io == 'true' }}
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: GoReleaser release
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          version: "${{ inputs.goreleaser-version }}"
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
