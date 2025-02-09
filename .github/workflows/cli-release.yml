@@ -32,6 +32,8 @@ jobs:
       docker-io: ${{steps.configure.outputs.docker-io}}
       ghcr-io: ${{steps.configure.outputs.ghcr-io}}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
       - name: Configure
         id: configure
         run: |

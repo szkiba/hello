@@ -42,6 +42,8 @@ jobs:
       ghcr-io: ${{steps.configure.outputs.ghcr-io}}
       devcontainer: ${{steps.configure.outputs.devcontainer}}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
       - name: Configure
         id: configure
         run: |
