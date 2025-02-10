@@ -1,6 +1,12 @@
 {
   "name": "hello",
   "image": "mcr.microsoft.com/devcontainers/base:1-bookworm",
+  "customizations": {
+    "vscode": {
+      "settings": {},
+      "extensions": ["esbenp.prettier-vscode", "github.vscode-github-actions", "github.vscode-pull-request-github"]
+    }
+  },
 
   "features": {
     "ghcr.io/devcontainers/features/github-cli:1": {},
@@ -10,12 +16,18 @@
     "ghcr.io/guiyomh/features/gotestsum:0": {},
     "ghcr.io/michidk/devcontainers-features/bun:1": {},
     "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
-    "ghcr.io/edouard-lopez/devcontainer-features/bats:0":{},
-    "ghcr.io/eitsupi/devcontainer-features/jq-likes:2": {"gojqVersion": "none", "jqVersion": "none", "xqVersion": "none", "jaqVersion": "none", "yqVersion": "4"},
-    "ghcr.io/szkiba/devcontainer-features/cdo:1":{},
-    "ghcr.io/szkiba/devcontainer-features/mdcode:1":{},
-    "ghcr.io/grafana/devcontainer-features/k6:1":{},
-    "ghcr.io/grafana/devcontainer-features/xk6:1":{}
+    "ghcr.io/edouard-lopez/devcontainer-features/bats:0": {},
+    "ghcr.io/eitsupi/devcontainer-features/jq-likes:2": {
+      "gojqVersion": "none",
+      "jqVersion": "none",
+      "xqVersion": "none",
+      "jaqVersion": "none",
+      "yqVersion": "4"
+    },
+    "ghcr.io/szkiba/devcontainer-features/cdo:1": {},
+    "ghcr.io/szkiba/devcontainer-features/mdcode:1": {},
+    "ghcr.io/grafana/devcontainer-features/k6:1": {},
+    "ghcr.io/grafana/devcontainer-features/xk6:1": {}
   },
 
   "remoteEnv": {

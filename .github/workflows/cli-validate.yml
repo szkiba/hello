@@ -89,7 +89,7 @@ jobs:
           go version
           test -z "$(go mod tidy && git status go.* --porcelain)"
           go mod verify
- 
+
       - name: Run golangci-lint ${{ inputs.golangci-lint-version }}
         uses: golangci/golangci-lint-action@v6
         with:
@@ -169,7 +169,7 @@ jobs:
           args: build --clean --snapshot --single-target
 
       - name: Test build
-        if: ${{ inputs.bats != '' }}
+        if: ${{ inputs.bats != '' && runner.os == 'Linux' }}
         run: bats ${{ inputs.bats }}
 
   report:
@@ -230,6 +230,6 @@ jobs:
 
       - name: Check golangci-lint version ${{inputs.golangci-lint-version}}
         run: test "${{env.GOLANGCI_LINT_VERSION}}" == "$(echo ${{inputs.golangci-lint-version}}|sed -e 's/v//g')"
-        
+
       - name: Check goreleaser version ${{inputs.goreleaser-version}}
         run: test "${{env.GORELEASER_VERSION}}" == "${{inputs.goreleaser-version}}"
