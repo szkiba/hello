@@ -169,8 +169,8 @@ jobs:
           args: build --clean --snapshot --single-target
 
       - name: Test build
-        if: ${{ inputs.bats != '' && runner.os == 'Linux'  }}
-        run: bats .github/ci.bats
+        if: ${{ inputs.bats != '' }}
+        run: bats ${{ inputs.bats }}
 
   report:
     name: Report
