@@ -78,7 +78,7 @@ jobs:
           fi
 
   security:
-    name: Scurity
+    name: Security
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -100,11 +100,13 @@ jobs:
         id: govulncheck
         uses: golang/govulncheck-action@v1
         with:
+          go-version-input: ${{inputs.go-version}}
           go-package: ./...
 
   lint:
     name: Lint
     runs-on: ubuntu-latest
+    needs: ["security", "vulnerability"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
