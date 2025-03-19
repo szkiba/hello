@@ -80,6 +80,7 @@ jobs:
   security:
     name: Security
     runs-on: ubuntu-latest
+    needs: ["config"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -92,6 +93,7 @@ jobs:
   vulnerability:
     name: Vulnerability
     runs-on: ubuntu-latest
+    needs: ["config"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -132,6 +134,7 @@ jobs:
   smoke:
     name: Smoke
     runs-on: ubuntu-latest
+    needs: ["security", "vulnerability"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
