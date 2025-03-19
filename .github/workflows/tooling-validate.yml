@@ -77,6 +77,31 @@ jobs:
             echo "Upload code coverage to codecov.com" >> $GITHUB_STEP_SUMMARY
           fi
 
+  security:
+    name: Scurity
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Gosec Security Scanner
+        uses: securego/gosec@master
+        with:
+          args: ./...
+
+  vulnerability:
+    name: Vulnerability
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Vulnerability Checker
+        id: govulncheck
+        uses: golang/govulncheck-action@v1
+        with:
+          go-package: ./...
+
   lint:
     name: Lint
     runs-on: ubuntu-latest
