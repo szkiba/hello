@@ -18,6 +18,11 @@ on:
         description: goreleaser tool version
         required: true
         type: string
+      k6-versions:
+        description: k6 versions for testing
+        required: false
+        default: '["latest"]'
+        type: string
       bats:
         description: bats scripts before release
         type: string
@@ -58,6 +63,7 @@ jobs:
           ---------------------|-----------------------------
           go version for build | ${{inputs.go-version}}
           GoReleaser version   | ${{inputs.goreleaser-version}}
+          k6 versions for test  | ${{join(fromJSON(inputs.k6-versions),' ')}}
 
           END
 
@@ -103,6 +109,8 @@ jobs:
 
       - name: Test Snapshot
         if: ${{ inputs.bats != '' }}
+        env:
+          K6_VERSIONS: ${{ join(fromJSON(inputs.k6-versions),' ') }}
         run: bats ${{ inputs.bats }}
 
       - name: Login to Docker Hub
