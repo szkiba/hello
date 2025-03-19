@@ -131,7 +131,7 @@ jobs:
         if: ${{ inputs.bats != '' }}
         env:
           K6_VERSIONS: ${{ join(fromJSON(inputs.k6-versions),' ') }}
-        run: bats ${{ inputs.bats }}
+        run: bats --pretty ${{ inputs.bats }}
 
       - name: Login to Docker Hub
         if: ${{ needs.config.outputs.docker-io == 'true' }}
