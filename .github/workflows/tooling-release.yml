@@ -28,6 +28,10 @@ on:
         type: string
         required: false
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   config:
     name: Config
