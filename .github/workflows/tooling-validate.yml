@@ -119,7 +119,6 @@ jobs:
 
       - name: Run golangci-lint ${{ inputs.golangci-lint-version }}
         uses: golangci/golangci-lint-action@v6
-        if: ${{ hashFiles('.golangci.yml', '.golangci.yaml', '.golangci.toml', '.golangci.json' ) != '' }}
         with:
           version: "${{ inputs.golangci-lint-version }}"
           only-new-issues: true
