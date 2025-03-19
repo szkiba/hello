@@ -27,6 +27,11 @@ on:
         description: goreleaser tool version
         required: true
         type: string
+      k6-versions:
+        description: k6 versions for testing
+        required: false
+        default: "[]"
+        type: string
       bats:
         description: bats scripts after build
         type: string
@@ -64,6 +69,7 @@ jobs:
           platforms for test    | ${{inputs.platforms}}
           golangci-lint version | ${{inputs.golangci-lint-version}}
           GoReleaser version    | ${{inputs.goreleaser-version}}
+          k6 versions for test  | ${{inputs.k6-versions}}
 
           END
 
