@@ -70,7 +70,7 @@ jobs:
           if [ -n "${{steps.configure.outputs.ghcr-io}}" ]; then
             echo "Push Docker image to ghcr.io " >> $GITHUB_STEP_SUMMARY
           fi
-          if [ -n "${{steps.configure.outputs.github-io}}" ]; then
+          if [ -n "${{steps.configure.outputs.docker-io}}" ]; then
             echo "Push Docker image to docker.io " >> $GITHUB_STEP_SUMMARY
           fi
 
