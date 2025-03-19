@@ -90,14 +90,6 @@ jobs:
         with:
           args: ./...
 
-  vulnerability:
-    name: Vulnerability
-    runs-on: ubuntu-latest
-    needs: ["config"]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
       - name: Run Vulnerability Checker
         id: govulncheck
         uses: golang/govulncheck-action@v1
@@ -108,7 +100,7 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
-    needs: ["security", "vulnerability"]
+    needs: ["security"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -127,6 +119,7 @@ jobs:
 
       - name: Run golangci-lint ${{ inputs.golangci-lint-version }}
         uses: golangci/golangci-lint-action@v6
+        if: ${{ hashFiles('.golangci.yml', '.golangci.yaml', '.golangci.toml', '.golangci.json' ) != '' }}
         with:
           version: "${{ inputs.golangci-lint-version }}"
           only-new-issues: true
@@ -134,7 +127,7 @@ jobs:
   smoke:
     name: Smoke
     runs-on: ubuntu-latest
-    needs: ["security", "vulnerability"]
+    needs: ["security"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
