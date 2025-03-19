@@ -131,7 +131,7 @@ jobs:
         if: ${{ inputs.bats != '' }}
         env:
           K6_VERSIONS: ${{ join(fromJSON(inputs.k6-versions),' ') }}
-          TERM: xterm
+          TERM: xterm-256color
         run: bats --print-output-on-failure --pretty ${{ inputs.bats }}
 
       - name: Login to Docker Hub
