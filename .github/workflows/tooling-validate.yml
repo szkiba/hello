@@ -201,7 +201,8 @@ jobs:
         if: ${{ inputs.bats != '' && runner.os == 'Linux' }}
         env:
           K6_VERSIONS: ${{ join(fromJSON(inputs.k6-versions),' ') }}
-        run: bats --pretty ${{ inputs.bats }}
+          TERM: xterm
+        run: bats --print-output-on-failure --pretty ${{ inputs.bats }}
 
   report:
     name: Report
