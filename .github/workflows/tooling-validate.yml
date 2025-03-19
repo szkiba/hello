@@ -176,6 +176,8 @@ jobs:
 
       - name: Test build
         if: ${{ inputs.bats != '' && runner.os == 'Linux' }}
+        env:
+          K6_VERSIONS: ${{ fromJSON(inputs.k6-versions) }}
         run: bats ${{ inputs.bats }}
 
   report:

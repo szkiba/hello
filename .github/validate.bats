@@ -1,19 +1,21 @@
 #!/usr/bin/env bats
 
 setup() {
-    cd $BATS_TEST_DIRNAME
+  cd $BATS_TEST_DIRNAME
 
-    EXE="$(ls $(git rev-parse --show-toplevel)/dist/hello_linux_$(dpkg --print-architecture)_v*/hello)"
+  echo "k6 versions: $K6_VERSIONS" >&3
 
-    if [ ! -x "$EXE" ]; then
-        echo "    - building snapshot" >&3
-        goreleaser build --clean --snapshot --single-target
-    fi
+  EXE="$(ls $(git rev-parse --show-toplevel)/dist/hello_linux_$(dpkg --print-architecture)_v*/hello)"
+
+  if [ ! -x "$EXE" ]; then
+    echo "    - building snapshot" >&3
+    goreleaser build --clean --snapshot --single-target
+  fi
 }
 
 @test 'execute' {
-    run $EXE
+  run $EXE
 
-    [ $status -eq 0 ]
-    [ "$output" = "Hello, World!" ]
+  [ $status -eq 0 ]
+  [ "$output" = "Hello, World!" ]
 }
