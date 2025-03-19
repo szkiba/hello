@@ -65,11 +65,11 @@ jobs:
           Description           | Value
           ----------------------|--------------------------------
           go version for build  | ${{inputs.go-version}}
-          go versions for test  | ${{join(fromJSON(inputs.go-versions),' ')}}
-          platforms for test    | ${{join(fromJSON(inputs.platforms),' ')}}
+          go versions for test  | ${{join(fromJSON(inputs.go-versions),', ')}}
+          platforms for test    | ${{join(fromJSON(inputs.platforms),', ')}}
           golangci-lint version | ${{inputs.golangci-lint-version}}
           GoReleaser version    | ${{inputs.goreleaser-version}}
-          k6 versions for test  | ${{join(fromJSON(inputs.k6-versions),' ')}}
+          k6 versions for test  | ${{join(fromJSON(inputs.k6-versions),', ')}}
 
           END
 

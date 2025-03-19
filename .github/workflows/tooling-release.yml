@@ -63,7 +63,7 @@ jobs:
           ---------------------|-----------------------------
           go version for build | ${{inputs.go-version}}
           GoReleaser version   | ${{inputs.goreleaser-version}}
-          k6 versions for test  | ${{join(fromJSON(inputs.k6-versions),' ')}}
+          k6 versions for test | ${{join(fromJSON(inputs.k6-versions),', ')}}
 
           END
 
