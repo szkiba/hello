@@ -64,6 +64,8 @@ jobs:
           go version for build | ${{inputs.go-version}}
           GoReleaser version   | ${{inputs.goreleaser-version}}
           k6 versions for test | ${{join(fromJSON(inputs.k6-versions),', ')}}
+          push to ghcr.io      | ${{steps.configure.outputs.ghcr-io}}
+          push to docker.io    | ${{steps.configure.outputs.docker-io}}
 
           END
 
