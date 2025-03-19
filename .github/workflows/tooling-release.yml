@@ -45,11 +45,10 @@ jobs:
           if yq -r '.dockers[].image_templates[]' .goreleaser.y*ml | grep -q ghcr.io ; then
             echo "docker=true" >> $GITHUB_OUTPUT
             echo "ghcr-io=true" >> $GITHUB_OUTPUT
-          else
-            if yq -r '.dockers[].image_templates[]' .goreleaser.y*ml | grep -qv ghcr.io ; then
-              echo "docker=true" >> $GITHUB_OUTPUT
-              echo "docker-io=true" >> $GITHUB_OUTPUT
-            fi
+          fi
+          if yq -r '.dockers[].image_templates[]' .goreleaser.y*ml | grep -q docker.io ; then
+            echo "docker=true" >> $GITHUB_OUTPUT
+            echo "docker-io=true" >> $GITHUB_OUTPUT
           fi
       - name: Summary
         run: |
