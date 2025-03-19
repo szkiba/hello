@@ -1,19 +1,19 @@
 #!/usr/bin/env bats
 
-function setup() {
-    ARCH=$(dpkg --print-architecture)
-    REPO=${GITHUB_REPOSITORY:-szkiba/hello}
-    IMAGE=${REPO}:latest-$ARCH
+setup() {
+  cd $BATS_TEST_DIRNAME
 
-    if [ -z "$(docker images $IMAGE --format json)" ] ; then
-      echo "    - building release" >&3
-      goreleaser release --clean --snapshot
-    fi
+  IMAGE=szkiba/hello:latest-$(dpkg --print-architecture)
+
+  if [ -z "$(docker images $IMAGE --format json)" ]; then
+    echo "    - building release" >&3
+    goreleaser release --clean --snapshot
+  fi
 }
 
 @test 'docker run' {
-    run docker run --rm ${REPO}:latest-amd64
+  run docker run --rm $IMAGE
 
-    [ $status -eq 0 ]
-    [ "$output" = "Hello, World!" ]
+  [ $status -eq 0 ]
+  [ "$output" = "Hello, World!" ]
 }

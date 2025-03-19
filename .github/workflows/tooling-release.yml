@@ -1,4 +1,4 @@
-name: CLI Release
+name: Tooling Release
 
 on:
   workflow_call:

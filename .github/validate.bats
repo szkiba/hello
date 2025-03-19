@@ -1,13 +1,13 @@
 #!/usr/bin/env bats
 
-function setup() {
-    ARCH=$(dpkg --print-architecture)
-    PROJECT=$(yq -r '.project_name' .goreleaser.y*ml)
-    EXE="$(ls dist/${PROJECT}_linux_${ARCH}_v*/${PROJECT})"
+setup() {
+    cd $BATS_TEST_DIRNAME
 
-    if [ ! -x "$EXE" ] ; then
-      echo "    - building snapshot" >&3
-      goreleaser build --clean --snapshot --single-target
+    EXE="$(ls $(git rev-parse --show-toplevel)/dist/hello_linux_$(dpkg --print-architecture)_v*/hello)"
+
+    if [ ! -x "$EXE" ]; then
+        echo "    - building snapshot" >&3
+        goreleaser build --clean --snapshot --single-target
     fi
 }
 

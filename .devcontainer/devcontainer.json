@@ -4,7 +4,15 @@
   "customizations": {
     "vscode": {
       "settings": {},
-      "extensions": ["esbenp.prettier-vscode", "github.vscode-github-actions", "github.vscode-pull-request-github"]
+      "extensions": [
+        "EditorConfig.EditorConfig",
+        "esbenp.prettier-vscode",
+        "github.vscode-github-actions",
+        "github.vscode-pull-request-github",
+        "jetmartin.bats",
+        "mads-hartmann.bash-ide-vscode",
+        "foxundermoon.shell-format"
+      ]
     }
   },
 
@@ -16,7 +24,6 @@
     "ghcr.io/guiyomh/features/gotestsum:0": {},
     "ghcr.io/michidk/devcontainers-features/bun:1": {},
     "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {},
-    "ghcr.io/edouard-lopez/devcontainer-features/bats:0": {},
     "ghcr.io/eitsupi/devcontainer-features/jq-likes:2": {
       "gojqVersion": "none",
       "jqVersion": "none",
@@ -26,6 +33,7 @@
     },
     "ghcr.io/szkiba/devcontainer-features/cdo:1": {},
     "ghcr.io/szkiba/devcontainer-features/mdcode:1": {},
+    "ghcr.io/szkiba/devcontainer-features/bats:1": { "version": "1.11.1" },
     "ghcr.io/grafana/devcontainer-features/k6:1": {},
     "ghcr.io/grafana/devcontainer-features/xk6:1": {}
   },
