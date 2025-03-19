@@ -75,9 +75,30 @@ jobs:
             echo "Push Docker image to docker.io " >> $GITHUB_STEP_SUMMARY
           fi
 
-  Release:
+  security:
+    name: Security
     runs-on: ubuntu-latest
     needs: ["config"]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Gosec Security Scanner
+        uses: securego/gosec@master
+        with:
+          args: ./...
+
+      - name: Run Vulnerability Checker
+        id: govulncheck
+        uses: golang/govulncheck-action@v1
+        with:
+          go-version-input: ${{inputs.go-version}}
+          go-package: ./...
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: ["security"]
     permissions:
       contents: write
       packages: write
