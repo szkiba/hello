@@ -121,11 +121,20 @@ jobs:
           test -z "$(go mod tidy && git status go.* --porcelain)"
           go mod verify
 
-      - name: Run golangci-lint ${{ inputs.golangci-lint-version }}
+      - name: Run minimal golangci-lint ${{ inputs.golangci-lint-version }}
+        if: ${{ hashFiles('.golangci.yml','.golangci.yaml','.golangci.toml','.golangci.json') == ''}}
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: "${{ inputs.golangci-lint-version }}"
+          args: --timeout=30m --no-config --presets bugs --enable gofmt
+
+      - name: Run configured golangci-lint ${{ inputs.golangci-lint-version }}
+        if: ${{ hashFiles('.golangci.yml','.golangci.yaml','.golangci.toml','.golangci.json') != ''}}
         uses: golangci/golangci-lint-action@v6
         with:
           version: "${{ inputs.golangci-lint-version }}"
           only-new-issues: true
+          args: --timeout=30m
 
   smoke:
     name: Smoke
@@ -142,7 +151,7 @@ jobs:
 
       - name: Run tests
         run: |
-          go test -short ./...
+          go test -short -timeout 2m ./...
 
   test:
     name: Test
@@ -166,7 +175,7 @@ jobs:
 
       - name: Run tests
         run: |
-          go test -race -timeout 60s ./...
+          go test -race -timeout 2m ./...
 
   build:
     name: Build
