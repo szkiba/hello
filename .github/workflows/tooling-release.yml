@@ -4,10 +4,10 @@ on:
   workflow_call:
     secrets:
       docker-user:
-        description: Docker
+        description: Docker Hub user name
         required: false
       docker-token:
-        description: Docker
+        description: Docker Hub user token
         required: false
     inputs:
       go-version:
@@ -131,6 +131,7 @@ jobs:
         if: ${{ inputs.bats != '' }}
         env:
           K6_VERSIONS: ${{ join(fromJSON(inputs.k6-versions),' ') }}
+          TERM: xterm-256color
         run: |
           cat >> $GITHUB_STEP_SUMMARY <<END
 

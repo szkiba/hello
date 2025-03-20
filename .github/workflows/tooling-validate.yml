@@ -200,10 +200,11 @@ jobs:
         if: ${{ inputs.bats != '' && runner.os == 'Linux' }}
         env:
           K6_VERSIONS: ${{ join(fromJSON(inputs.k6-versions),' ') }}
+          TERM: xterm-256color
         run: |
           cat >> $GITHUB_STEP_SUMMARY <<END
 
-          ### Test build
+          ### Test Build
 
           END
 
