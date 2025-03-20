@@ -4,9 +4,9 @@
 
 The following workflows are used to maintain the **xk6 repository** itself. These workflows are not designed to be reusable, and are subject to change at any time without notice.
 
-### [Validate](../../.github/workflows/validate.yml)
+### Validate
 
-The **Validate** workflow validates the source code change in case of a push or pull request to the default branch. This workflow calls the [Tooling Validate](#tooling-validate) reusable workflow with appropriate parameters. The parameters can be configured in GitHub repository variables and GitHub repository secrets.
+The [Validate workflow](../../.github/workflows/validate.yml) validates the source code change in case of a push or pull request to the default branch. This workflow calls the [Tooling Validate](#tooling-validate) reusable workflow with appropriate parameters. The parameters can be configured in GitHub repository variables and GitHub repository secrets.
 
 **triggers**
 
@@ -36,9 +36,9 @@ The **Validate** workflow validates the source code change in case of a push or 
       bats: .github/validate.bats
 ```
 
-### [Release](../../.github/workflows/release.yml)
+### Release
 
-The **Release** workflow generates and publishes the release artifacts in case of version tag creation. This workflow calls the [Tooling Release](#tooling-release) reusable workflow with appropriate parameters. The parameters can be configured in GitHub repository variables and GitHub repository secrets.
+The [Release workflow](../../.github/workflows/release.yml) generates and publishes the release artifacts in case of version tag creation. This workflow calls the [Tooling Release](#tooling-release) reusable workflow with appropriate parameters. The parameters can be configured in GitHub repository variables and GitHub repository secrets.
 
 **triggers**
 
@@ -71,7 +71,7 @@ Input parameters will change in a backwards compatible way if possible, but it i
 
 ### Tooling Validate
 
-The [Tooling Validate](../../.github/workflows/tooling-validate.yml) reusable workflow validates the source code modification.
+The [Tooling Validate reusable workflow](../../.github/workflows/tooling-validate.yml) validates the source code modification.
 
 ![tooling-validate-dark](tooling-validate-dark.png#gh-dark-mode-only)
 ![tooling-validate-light](tooling-validate-light.png#gh-light-mode-only)
@@ -148,7 +148,7 @@ The [Tooling Validate](../../.github/workflows/tooling-validate.yml) reusable wo
 
 ### Tooling Release
 
-The [Tooling Release](../../.github/workflows/tooling-release.yml) reusable workflow generates and publishes release artifacts (including Docker images).
+The [Tooling Release reusable workflow](../../.github/workflows/tooling-release.yml) generates and publishes release artifacts (including Docker images).
 
 ![tooling-release-dark](tooling-release-dark.png#gh-dark-mode-only)
 ![tooling-release-light](tooling-release-light.png#gh-light-mode-only)
