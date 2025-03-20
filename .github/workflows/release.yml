@@ -1,8 +1,10 @@
 name: Release
 
 on:
+  # #region triggers
   push:
     tags: ["v*.*.*"]
+  # #endregion triggers
 
 jobs:
   release:
@@ -14,9 +16,9 @@ jobs:
       docker-token: ${{secrets.DOCKERHUB_TOKEN}}
       # #endregion
     with:
-      # #region variables
+      # #region inputs
       go-version: ${{vars.GO_VERSION}}
       goreleaser-version: ${{vars.GORELEASER_VERSION}}
       k6-versions: ${{vars.K6_VERSIONS}}
-      # #endregion variables
       bats: ./.github/release.bats
+      # #endregion inputs

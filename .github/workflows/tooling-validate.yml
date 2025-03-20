@@ -1,9 +1,4 @@
-# #region doc
 name: Tooling Validate
-description: |
-  Hey
-
-# #endregion doc
 
 on:
   workflow_call:
@@ -216,7 +211,7 @@ jobs:
 
           END
 
-          bats ${{ inputs.bats }} >> $GITHUB_STEP_SUMMARY
+          bats ${{ inputs.bats }} | tee -a $GITHUB_STEP_SUMMARY
 
   report:
     name: Report

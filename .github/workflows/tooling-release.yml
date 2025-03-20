@@ -1,9 +1,4 @@
-# #region doc
 name: Tooling Release
-description: |
-  Release
-
-# #endregion doc
 
 on:
   workflow_call:
@@ -147,7 +142,7 @@ jobs:
 
           END
 
-          bats ${{ inputs.bats }} >> $GITHUB_STEP_SUMMARY
+          bats ${{ inputs.bats }} | tee -a $GITHUB_STEP_SUMMARY
 
       - name: Login to Docker Hub
         if: ${{ needs.config.outputs.docker-io == 'true' }}

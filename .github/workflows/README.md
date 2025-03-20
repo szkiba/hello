@@ -2,11 +2,21 @@
 
 ## Repository workflows
 
-The following workflows are used to maintain the xk6 repository itself. These workflows are not designed to be reusable, and are subject to change at any time without notice.
+The following workflows are used to maintain the **xk6 repository** itself. These workflows are not designed to be reusable, and are subject to change at any time without notice.
 
-### [validate.yml](validate.yml)
+### [Validate](validate.yml)
 
-This workflow calls the [tooling-validate](#tooling-validateyml) reusable workflow with appropriate parameters. The parameters can be configured in GitHub repository variables and GitHub repository secrets.
+This workflow calls the [Tooling Validate](#tooling-validate) reusable workflow with appropriate parameters. The parameters can be configured in GitHub repository variables and GitHub repository secrets.
+
+**triggers**
+
+```yaml file=validate.yml region=triggers
+  workflow_dispatch:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+    branches: ["main", "master"]
+```
 
 **secrets**
 
@@ -14,20 +24,28 @@ This workflow calls the [tooling-validate](#tooling-validateyml) reusable workfl
       codecov-token: ${{secrets.CODECOV_TOKEN}}
 ```
 
-**variables**
+**inputs**
 
-```yaml file=validate.yml region=variables
+```yaml file=validate.yml region=inputs
       go-version: ${{vars.GO_VERSION}}
       go-versions: ${{vars.GO_VERSIONS}}
       golangci-lint-version: ${{vars.GOLANGCI_LINT_VERSION}}
       goreleaser-version: ${{vars.GORELEASER_VERSION}}
       platforms: ${{vars.PLATFORMS}}
       k6-versions: ${{vars.K6_VERSIONS}}
+      bats: .github/validate.bats
 ```
 
-### [release.yml](release.yml)
+### [Release](release.yml)
 
-This workflow calls the [tooling-release](#tooling-releaseyml) reusable workflow with appropriate parameters. The parameters can be configured in GitHub repository variables and GitHub repository secrets.
+This workflow calls the [Tooling Release](#tooling-release) reusable workflow with appropriate parameters. The parameters can be configured in GitHub repository variables and GitHub repository secrets.
+
+**triggers**
+
+```yaml file=release.yml region=triggers
+  push:
+    tags: ["v*.*.*"]
+```
 
 **secrets**
 
@@ -36,28 +54,22 @@ This workflow calls the [tooling-release](#tooling-releaseyml) reusable workflow
       docker-token: ${{secrets.DOCKERHUB_TOKEN}}
 ```
 
-**variables**
+**inputs**
 
-```yaml file=release.yml region=variables
+```yaml file=release.yml region=inputs
       go-version: ${{vars.GO_VERSION}}
       goreleaser-version: ${{vars.GORELEASER_VERSION}}
       k6-versions: ${{vars.K6_VERSIONS}}
+      bats: ./.github/release.bats
 ```
 
 ## Tooling workflows
 
-The following workflows are used to maintain tools related to the development of k6 extensions. These workflows are designed to be reusable.
+The following workflows are used to maintain tools related to the development of k6 extensions. These workflows are designed to be **reusable**.
 
 Input parameters will change in a backwards compatible way if possible, but it is strongly recommended to use workflows with a specific version tag.
 
-### [tooling-validate.yml](tooling-validate.yml)
-
-```yaml file=tooling-validate.yml region=doc
-name: Tooling Validate
-description: |
-  Hey
-
-```
+### [Tooling Validate](tooling-validate.yml)
 
 **secrets**
 
@@ -101,14 +113,7 @@ description: |
         required: false
 ```
 
-### [tooling-release.yml](tooling-release.yml)
-
-```yaml file=tooling-release.yml region=doc
-name: Tooling Release
-description: |
-  Release
-
-```
+### [Tooling Release](tooling-release.yml)
 
 **secrets**
 
