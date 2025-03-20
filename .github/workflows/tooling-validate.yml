@@ -207,7 +207,9 @@ jobs:
         uses: goreleaser/goreleaser-action@v6
         with:
           version: "${{ inputs.goreleaser-version }}"
+          # #region build-args
           args: build --clean --snapshot --single-target
+          # #endregion build-args
 
       - name: Test Build
         if: ${{ inputs.bats != '' && runner.os == 'Linux' }}
