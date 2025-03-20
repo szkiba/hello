@@ -14,9 +14,6 @@ setup() {
 }
 
 @test 'execute' {
-  echo "    - dumb" >&3
-  echo "    - dumber" >&3
-
   run $EXE
 
   [ $status -eq 0 ]

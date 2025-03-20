@@ -12,8 +12,6 @@ setup() {
 }
 
 @test 'docker run' {
-  echo "    - dumb" >&3
-  echo "    - dumber" >&3
   run docker run --rm $IMAGE
 
   [ $status -eq 0 ]
