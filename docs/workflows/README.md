@@ -6,7 +6,7 @@ The following workflows are used to maintain the **xk6 repository** itself. Thes
 
 ### Validate
 
-The **Validate** ([`validate.yml`](../../.github/workflows/validate.yml)) workflow validates the source code change in case of a push or pull request to the default branch. This workflow calls the [Tooling Validate](#tooling-validate) reusable workflow with appropriate parameters. The parameters can be configured in [GitHub repository variables](https://github.com/grafana/xk6/settings/variables/actions) and [GitHub secrets](https://github.com/grafana/xk6/settings/secrets/actions).
+The **Validate** ([`validate.yml`](../../.github/workflows/validate.yml)) workflow validates the source code change in case of a push or pull request to the default branch. This workflow calls the [Tooling Validate](#tooling-validate) reusable workflow with appropriate parameters. The parameters can be configured in [GitHub repository variables](https://github.com/grafana/xk6/settings/variables/actions) and [GitHub repository secrets](https://github.com/grafana/xk6/settings/secrets/actions).
 
 The [`validate.bats`](../../.github/validate.bats) script is passed as the integration test. The test builds a `k6` with a specific extension using the k6 versions specified in the `K6_VERSIONS` repository variable. After a successful build, it runs the built k6 with the `version` command and checks if the specific extension is included in the output.
 
