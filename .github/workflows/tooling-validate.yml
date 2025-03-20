@@ -5,38 +5,38 @@ on:
     secrets:
       # #region secrets
       codecov-token:
-        description: Token for Codecov reports
+        description: Token to be used to upload test coverage data to Codecov.
         required: false
       # #endregion secrets
     inputs:
       # #region inputs
       go-version:
-        description: go version for building
+        description: The go version to use for the build.
         required: true
         type: string
       go-versions:
-        description: go versions for testing
+        description: The go versions to use for running the tests. JSON string array (e.g. ["1.24.x", "1.23.x"])
         required: true
         type: string
       platforms:
-        description: platforms for testing
+        description: Platforms to be used to run the tests. JSON string array (e.g. ["ubuntu-latest","macos-latest"])
         required: true
         type: string
       golangci-lint-version:
-        description: golangci-lint tool version
+        description: The golangci-lint version to use for static analysis.
         required: true
         type: string
       goreleaser-version:
-        description: goreleaser tool version
+        description: The version of GoReleaser to use for builds and releases.
         required: true
         type: string
       k6-versions:
-        description: k6 versions for testing
+        description: The k6 versions to be used for integration tests. JSON string array (e.g. ["v0.57.0","v0.56.0"])
         required: false
         default: '["latest"]'
         type: string
       bats:
-        description: bats scripts after build
+        description: The bats scripts to use for integration testing. Space-separated file names or patterns.
         type: string
         required: false
       # #endregion inputs

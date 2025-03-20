@@ -8,6 +8,8 @@ The following workflows are used to maintain the **xk6 repository** itself. Thes
 
 The **Validate** ([`validate.yml`](../../.github/workflows/validate.yml)) workflow validates the source code change in case of a push or pull request to the default branch. This workflow calls the [Tooling Validate](#tooling-validate) reusable workflow with appropriate parameters. The parameters can be configured in GitHub repository variables and GitHub repository secrets.
 
+The [`validate.bats`](../../.github/validate.bats) script is passed as the integration test. The test builds a `k6` with a specific extension using the k6 versions specified in the `K6_VERSIONS` repository variable. After a successful build, it runs the built k6 with the `version` command and checks if the specific extension is included in the output.
+
 **triggers**
 
 ```yaml file=../../.github/workflows/validate.yml region=triggers
@@ -39,6 +41,8 @@ The **Validate** ([`validate.yml`](../../.github/workflows/validate.yml)) workfl
 ### Release
 
 The **Release** ([`release.yml`](../../.github/workflows/release.yml)) workflow generates and publishes the release artifacts in case of version tag creation. This workflow calls the [Tooling Release](#tooling-release) reusable workflow with appropriate parameters. The parameters can be configured in GitHub repository variables and GitHub repository secrets.
+
+The [`release.bats`](../../.github/release.bats) script is passed as the integration test. One test case builds a k6 using xk6 with a specific extension using the k6 versions specified in the `K6_VERSIONS` repository variable. After a successful build, it runs the built k6 with the `version` command and checks if the specific extension is included in the output. The other test case does the same thing, but uses the xk6 Docker image to build the k6.
 
 **triggers**
 
@@ -97,7 +101,7 @@ The **Tooling Validate** ([`tooling-validate.yml`](../../.github/workflows/tooli
 - **Build**: Create builds using [GoReleaser](https://goreleaser.com/) tool on multiple platforms using multiple go versions. The build will be done with a matrix strategy, the number of jobs run is the number of go versions multiplied by the number of platforms. The build does not stop on the first job failure, all jobs in the matrix are executed. If any job fails, the workflow will stop. The typical input contains two go versions and three platforms (`ubuntu-latest`, `windows-latest`, `macos-latest`) which is 6 jobs in the matrix.
   The build is done with the following GoReleaser arguments:
   ```yaml file=../../.github/workflows/tooling-validate.yml region=build-args
-          args: build --clean --snapshot --single-target
+            args: build --clean --snapshot --single-target
   ```
 
   [Bats](https://github.com/bats-core/bats-core) (Bash Automated Testing System) scripts can be specified as integration tests. These will be executed in jobs running on `Linux` operating systems (with all go versions specified in the input). If any integration test script fails, the workflow will stop with an error.
@@ -108,7 +112,7 @@ The **Tooling Validate** ([`tooling-validate.yml`](../../.github/workflows/tooli
 
 ```yaml file=../../.github/workflows/tooling-validate.yml region=secrets
       codecov-token:
-        description: Token for Codecov reports
+        description: Token to be used to upload test coverage data to Codecov.
         required: false
 ```
 
@@ -116,32 +120,32 @@ The **Tooling Validate** ([`tooling-validate.yml`](../../.github/workflows/tooli
 
 ```yaml file=../../.github/workflows/tooling-validate.yml region=inputs
       go-version:
-        description: go version for building
+        description: The go version to use for the build.
         required: true
         type: string
       go-versions:
-        description: go versions for testing
+        description: The go versions to use for running the tests. JSON string array (e.g. ["1.24.x", "1.23.x"])
         required: true
         type: string
       platforms:
-        description: platforms for testing
+        description: Platforms to be used to run the tests. JSON string array (e.g. ["ubuntu-latest","macos-latest"])
         required: true
         type: string
       golangci-lint-version:
-        description: golangci-lint tool version
+        description: The golangci-lint version to use for static analysis.
         required: true
         type: string
       goreleaser-version:
-        description: goreleaser tool version
+        description: The version of GoReleaser to use for builds and releases.
         required: true
         type: string
       k6-versions:
-        description: k6 versions for testing
+        description: The k6 versions to be used for integration tests. JSON string array (e.g. ["v0.57.0","v0.56.0"])
         required: false
         default: '["latest"]'
         type: string
       bats:
-        description: bats scripts after build
+        description: The bats scripts to use for integration testing. Space-separated file names or patterns.
         type: string
         required: false
 ```
@@ -167,10 +171,10 @@ The **Tooling Release** ([`tooling-release.yml`](../../.github/workflows/tooling
 
 ```yaml file=../../.github/workflows/tooling-release.yml region=secrets
       docker-user:
-        description: Docker Hub user name
+        description: Username to use for pushing Docker images to Docker Hub.
         required: false
       docker-token:
-        description: Docker Hub user token
+        description: Token to use for pushing Docker images to Docker Hub.
         required: false
 ```
 
@@ -178,20 +182,20 @@ The **Tooling Release** ([`tooling-release.yml`](../../.github/workflows/tooling
 
 ```yaml file=../../.github/workflows/tooling-release.yml region=inputs
       go-version:
-        description: go version for building
+        description: The go version to use for the build.
         required: true
         type: string
       goreleaser-version:
-        description: goreleaser tool version
+        description: The version of GoReleaser to use for builds and releases.
         required: true
         type: string
       k6-versions:
-        description: k6 versions for testing
+        description: The k6 versions to be used for integration tests. JSON string array (e.g. ["v0.57.0","v0.56.0"])
         required: false
         default: '["latest"]'
         type: string
       bats:
-        description: bats scripts before release
+        description: The bats scripts to use for integration testing. Space-separated file names or patterns.
         type: string
         required: false
 ```
