@@ -9,10 +9,14 @@ jobs:
     name: Release
     uses: ./.github/workflows/tooling-release.yml
     secrets:
+      # #region secrets
       docker-user: ${{secrets.DOCKERHUB_USERNAME}}
       docker-token: ${{secrets.DOCKERHUB_TOKEN}}
+      # #endregion
     with:
+      # #region variables
       go-version: ${{vars.GO_VERSION}}
       goreleaser-version: ${{vars.GORELEASER_VERSION}}
       k6-versions: ${{vars.K6_VERSIONS}}
+      # #endregion variables
       bats: ./.github/release.bats

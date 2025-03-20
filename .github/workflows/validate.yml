@@ -1,4 +1,9 @@
+# #region doc
 name: Validate
+description: |
+  Validation
+
+# #endregion doc
 
 on:
   workflow_dispatch:
@@ -12,12 +17,16 @@ jobs:
     name: Validate
     uses: ./.github/workflows/tooling-validate.yml
     secrets:
+      # #region secrets
       codecov-token: ${{secrets.CODECOV_TOKEN}}
+      # #endregion secrets
     with:
+      # #region variables
       go-version: ${{vars.GO_VERSION}}
       go-versions: ${{vars.GO_VERSIONS}}
       golangci-lint-version: ${{vars.GOLANGCI_LINT_VERSION}}
       goreleaser-version: ${{vars.GORELEASER_VERSION}}
       platforms: ${{vars.PLATFORMS}}
       k6-versions: ${{vars.K6_VERSIONS}}
+      # #endregion variables
       bats: .github/validate.bats

@@ -1,12 +1,20 @@
+# #region doc
 name: Tooling Validate
+description: |
+  Hey
+
+# #endregion doc
 
 on:
   workflow_call:
     secrets:
+      # #region secrets
       codecov-token:
         description: Token for Codecov reports
         required: false
+      # #endregion secrets
     inputs:
+      # #region inputs
       go-version:
         description: go version for building
         required: true
@@ -36,6 +44,7 @@ on:
         description: bats scripts after build
         type: string
         required: false
+      # #endregion inputs
 
 jobs:
   config:

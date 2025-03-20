@@ -1,15 +1,23 @@
+# #region doc
 name: Tooling Release
+description: |
+  Release
+
+# #endregion doc
 
 on:
   workflow_call:
     secrets:
+      # #region secrets
       docker-user:
         description: Docker Hub user name
         required: false
       docker-token:
         description: Docker Hub user token
         required: false
+      # #endregion secrets
     inputs:
+      # #region inputs
       go-version:
         description: go version for building
         required: true
@@ -27,6 +35,7 @@ on:
         description: bats scripts before release
         type: string
         required: false
+      # #endregion inputs
 
 jobs:
   config:
