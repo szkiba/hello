@@ -196,14 +196,14 @@ jobs:
           version: "${{ inputs.goreleaser-version }}"
           args: build --clean --snapshot --single-target
 
-      - name: Test build
+      - name: Test Build
         if: ${{ inputs.bats != '' && runner.os == 'Linux' }}
         env:
           K6_VERSIONS: ${{ join(fromJSON(inputs.k6-versions),' ') }}
         run: |
           cat >> $GITHUB_STEP_SUMMARY <<END
 
-          ### Test build (go: ${{matrix.go-version}}, platform: ${{matrix.platform}})
+          ### Test build
 
           END
 

@@ -134,7 +134,7 @@ jobs:
         run: |
           cat >> $GITHUB_STEP_SUMMARY <<END
 
-          ### Test Snapshot (go: ${{inputs.go-version}}, platform: ${{runner.os}})
+          ### Test Snapshot
 
           END
 
