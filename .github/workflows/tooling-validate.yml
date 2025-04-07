@@ -200,7 +200,7 @@ jobs:
           go-version: ${{ matrix.go-version }}
 
       - name: Setup Bats
-        if: ${{ inputs.bats != '' && runner.os == 'Linux' }}
+        # if: ${{ inputs.bats != '' && runner.os == 'Linux' }}
         id: setup-bats
         uses: bats-core/bats-action@3.0.0
 
