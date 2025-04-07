@@ -201,7 +201,8 @@ jobs:
 
       - name: Setup Bats
         if: ${{ inputs.bats != '' && runner.os == 'Linux' }}
-        run: sudo apt-get install -y bats
+        id: setup-bats
+        uses: bats-core/bats-action@3.0.0
 
       - name: GoReleaser build
         uses: goreleaser/goreleaser-action@v6
