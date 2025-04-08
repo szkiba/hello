@@ -1,0 +1,23 @@
+name: Release Extensions
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+jobs:
+  release:
+    name: Release Extensions
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create tags
+        run: |
+          for file in $(ls ext/*/go.mod); do
+            dir=$(dirname $file)
+            git tag -a -m "${{github.ref_name}}" "${dir}/${{github.ref_name}}"
+          done
+          git push --tags
