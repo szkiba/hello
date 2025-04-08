@@ -1,4 +1,4 @@
-module github.com/grafana/xk6-it/ext/base64
+module github.com/szkiba/hello/ext/base64
 
 go 1.23.0
 

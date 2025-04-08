@@ -1,4 +1,4 @@
-module github.com/grafana/xk6-it/ext/ascii85
+module github.com/szkiba/hello/ext/ascii85
 
 go 1.23.0
 

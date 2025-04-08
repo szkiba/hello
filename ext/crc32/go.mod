@@ -1,4 +1,4 @@
-module github.com/grafana/xk6-it/ext/crc32
+module github.com/szkiba/hello/ext/crc32
 
 go 1.23.0
 

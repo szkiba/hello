@@ -1,4 +1,4 @@
-module github.com/grafana/xk6-it/ext/sha256
+module github.com/szkiba/hello/ext/sha256
 
 go 1.23.0
 

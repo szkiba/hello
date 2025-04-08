@@ -1,4 +1,4 @@
-module github.com/grafana/xk6-it/ext/sha512
+module github.com/szkiba/hello/ext/sha512
 
 go 1.23.0
 
