@@ -1,0 +1,34 @@
+version: "2"
+linters:
+  default: all
+  disable:
+    # In many cases (e.g. options) it is normal usage not to specify all structure fields.
+    - exhaustruct
+
+    # Many go standard library API functions have typical parameter names shorter than 3 characters.
+    # It is better to use the usual parameter names than to create one that conforms to the rule.
+    - varnamelen
+
+    # Except for general-purpose public APIs,
+    # wrapping errors is more inconvenient and error prone than useful.
+    - wrapcheck
+  settings:
+    # Temporary mitigation.
+    cyclop:
+      max-complexity: 20
+    depguard:
+      rules:
+        prevent_accidental_imports:
+          allow:
+            - $gostd
+            - github.com/szkiba/hello
+
+issues:
+  max-issues-per-linter: 0
+  max-same-issues: 0
+formatters:
+  enable:
+    - gci
+    - gofmt
+    - gofumpt
+    - goimports
